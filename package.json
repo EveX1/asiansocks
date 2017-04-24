@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/EveX1/asiansocks/issues"
   },
-  "homepage": "https://github.com/EveX1/asiansocks#readme"
+  "homepage": "https://github.com/EveX1/asiansocks#readme",
+  "dependencies": {
+    "js-yaml": "^3.8.3"
+  }
 }

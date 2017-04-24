@@ -1,5 +1,12 @@
+/*
+ * PACKAGES
+ */
 import fs from 'fs';
 import ArgParseObj from 'argparse';
+
+/*
+ * PARSER de mots-clés et Paramaètres d'API Twitter
+ */
 
 const ArgParse = ArgParseObj.ArgumentParser;
 
@@ -21,9 +28,6 @@ parser.addArgument(
     }
 );
 
-
-const config = "./config/";
-
 const args = parser.parseArgs();
 
-fs.readFileSync(`${config}${args.config}`, "utf8");
+fs.readFileSync(`${args.config}/config.yml`, "utf8");

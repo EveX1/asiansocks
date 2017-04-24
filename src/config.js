@@ -1,5 +1,12 @@
+/*
+ * PACKAGES
+ */
+// travailler sur des fichiers
 import fs from 'fs';
+// créer des arguments de commande perso
 import ArgParseObj from 'argparse';
+// exploiter des fichiers YAML
+const yaml = require('js-yaml');
 
 const ArgParse = ArgParseObj.ArgumentParser;
 
@@ -9,11 +16,11 @@ const parser = new ArgParse({
     description: 'config.yml parser'
 });
 
-parser.addArgument(
-    ['-a', '--api'], {
-        help: 'API a utiliser (twitter)'
-    }
-);
+// parser.addArgument(
+//     ['-a', '--api'], {
+//         help: 'API a utiliser (twitter)'
+//     }
+// );
 
 parser.addArgument(
     ['-ck', '--consumerkey'], {
@@ -40,7 +47,7 @@ parser.addArgument(
 );
 
 parser.addArgument(
-    ['', '--ip'], {
+    '--ip', {
         help: 'IP de la base de données'
     }
 );
@@ -52,19 +59,29 @@ parser.addArgument(
 );
 
 parser.addArgument(
-    ['', '--db'], {
+    '--db', {
         help: 'Nom de la base de données'
     }
 );
 
-const configSample = "./config/config.sample.yml";
-const config = "./config/config.yml";
+parser.addArgument(
+    ['-c', '--config'], {
+        help: 'Chemin du fichier de configuration pour API Twitter',
+        defaultValue: "/config"
+    }
+);
+
+const args = parser.parseArgs();
+
+let configSample = `.${args.config}/config.sample.yml`;
+let config = `.${args.config}/config.yml`;
 
 if (fs.existsSync(config)) {
     fs.unlinkSync(config);
 }
 
-fs.readFileSync(configSample, "utf8");
-fs.appendFileSync(config, )
+configStructure = fs.readFileSync(configSample, "utf8");
+fs.appendFileSync(config, configStructure)
 
-const args = parser.parseArgs();
+
+console.log(args)

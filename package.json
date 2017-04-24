@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node build/index.js",
+    "config": "node build/config.js",
     "build": "babel src/ --out-dir build/",
     "build:watch": "babel --watch src/ --out-dir build/"
   },
@@ -23,5 +24,12 @@
   "bugs": {
     "url": "https://github.com/EveX1/asiansocks/issues"
   },
-  "homepage": "https://github.com/EveX1/asiansocks#readme"
+  "homepage": "https://github.com/EveX1/asiansocks#readme",
+  "dependencies": {
+    "express": "^4.15.2",
+    "js-yaml": "^3.8.3",
+    "node-tweet-stream": "^2.0.1",
+    "path": "^0.12.7",
+    "pug": "^2.0.0-beta.12"
+  }
 }

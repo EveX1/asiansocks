@@ -3,6 +3,7 @@
  */
 import fs from 'fs';
 import ArgParseObj from 'argparse';
+import path from 'path';
 
 /*
  * PARSER de mots-clés et Paramaètres d'API Twitter
@@ -24,10 +25,14 @@ parser.addArgument(
 
 parser.addArgument(
     ['-c', '--config'], {
-        help: 'Fichier de configuration pour API Twitter'
+        help: 'Chemin du fichier de configuration pour API Twitter',
+        defaultValue: "/config"
     }
 );
 
 const args = parser.parseArgs();
 
-fs.readFileSync(`${args.config}/config.yml`, "utf8");
+fs.readFileSync(path.join(__dirname, `/../${args.config}/config.yml`), "utf8");
+
+console.log(args.keywords.split(','));
+console.log(path.dirname(args.config));

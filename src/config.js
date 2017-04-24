@@ -80,8 +80,9 @@ if (fs.existsSync(config)) {
     fs.unlinkSync(config);
 }
 
-configStructure = fs.readFileSync(configSample, "utf8");
+let configStructure = fs.readFileSync(configSample, "utf8");
 fs.appendFileSync(config, configStructure)
 
 
+console.log(configStructure)
 console.log(args)

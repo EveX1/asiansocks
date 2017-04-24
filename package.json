@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/EveX1/asiansocks#readme",
   "dependencies": {
-    "node-tweet-stream": "^2.0.1"
+    "node-tweet-stream": "^2.0.1",
     "js-yaml": "^3.8.3"
   }
 }

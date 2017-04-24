@@ -1,2 +1,5 @@
 node_modules
 config/config.yml
+build
+.idea/
+config/config.yml

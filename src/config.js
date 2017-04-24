@@ -81,8 +81,11 @@ if (fs.existsSync(config)) {
 }
 
 let configStructure = fs.readFileSync(configSample, "utf8");
+
+configStructure.consumerkey.replace
+
 fs.appendFileSync(config, configStructure)
 
+console.log(configStructure);
 
-console.log(configStructure)
 console.log(args)

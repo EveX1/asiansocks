@@ -1,0 +1,11 @@
+default:
+    api:
+        twitter:
+            - consumerkey:
+            - consumersecret:
+            - token:
+            - tokensecret:
+    db:
+        - ip:
+        - port:
+        - db:

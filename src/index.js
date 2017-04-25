@@ -37,6 +37,13 @@ parser.addArgument(
     }
 );
 
+parser.addArgument(
+    ['-d', '--delay'], {
+        help: 'temps d\'execution du script',
+        defaultValue: 60000
+    }
+);
+
 // enregistrer l'ensemble des arguments et leur valeur dans un objet args
 const args = parser.parseArgs();
 
@@ -58,7 +65,8 @@ const userextract = new userExtract(
     config.default.api.twitter.tokensecret,
     config.default.db.ip,
     config.default.db.port,
-    config.default.db.db
+    config.default.db.db,
+    args.delay
 );
 
 userextract.extract(keywords);

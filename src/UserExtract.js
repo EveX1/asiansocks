@@ -4,9 +4,9 @@ import mongoose from 'mongoose';
 mongoose.Promise = global.Promise;
 
 export default class UserExtract{
-    constructor(ck, cs, t, ts, ip, port, db){
+    constructor(ck, cs, t, ts, ip, port, db, delay){
         //the hack degueulasse !!
-        let that = this;
+        // let that = this;
 
         //connection
         this.connect(ip, port, db).then(response => {
@@ -28,40 +28,55 @@ export default class UserExtract{
         this.regEmail = new RegExp(/(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})/gi);
 
         this.t.on('tweet', tweet => {
-            const text = tweet.text;
+            //verification si la connection est active (un peu overkill)
+            if(mongoose.connection._readyState === 1){
+                const text = tweet.text;
 
-            const mailText = text.match(this.regEmail);
+                const mailText = text.match(this.regEmail);
 
 
-            if (mailText !== null){
-                console.log(`Create user (text) : ${tweet.user.name}`);
-                this.createUser(tweet.user.name, mailText);
-            }
-
-            if(tweet.user.description !== null) {
-                const description = tweet.user.description;
-                const mailDescription = description.match(this.regEmail);
-
-                if(mailDescription !== null) {
-                    console.log(`Create user (desc) : ${tweet.user.name}`);
-                    this.createUser(tweet.user.name, mailDescription);
+                if (mailText !== null){
+                    console.log(`Create user (text) : ${tweet.user.name}`);
+                    this.createUser(tweet.user.name, mailText);
                 }
+
+                if(tweet.user.description !== null) {
+                    const description = tweet.user.description;
+                    const mailDescription = description.match(this.regEmail);
+
+                    if(mailDescription !== null) {
+                        console.log(`Create user (desc) : ${tweet.user.name}`);
+                        this.createUser(tweet.user.name, mailDescription);
+                    }
+                }
+            } else {
+                console.log("not connected");
             }
         });
+
 
         this.t.on('error', err => {
             console.log('Oh no')
         })
 
-        //arret du script au bout de 50 secondes avec deconnection de la bdd
+        //arret du script apres le delay
+        this.delayInSeconds = delay/1000;
         setTimeout(() => {
-            process.exit();
-        }, 50000);
+            process.exit(`after timeout (${this.delayInSeconds} seconds)`);
+        }, delay);
 
-        process.on('exit', () => {
-            mongoose.connection.close();
-            console.log('#####Connection closed#####');
+
+        //arret du script avec ctrl-C
+        process.on('SIGINT', () => {
+            process.exit('on demand');
         })
+
+        process.on('exit', code => {
+            mongoose.connection.close();
+            console.log(`#####Connection closed : ${code} #####`);
+        })
+
+
 
     }
 
@@ -82,7 +97,7 @@ export default class UserExtract{
     }
 
     createUser(username, email){
-            this.user.create(username, email);
-            console.log('User created');
+        this.user.create(username, email);
+        console.log('User created');
     }
 }

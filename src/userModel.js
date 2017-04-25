@@ -11,6 +11,7 @@ export default class UserModel {
 
 
     connect(ip, port, db){
+
         return new Promise((resolve, reject) => {
             mongoose.connect(`mongodb://${ip}:${port}/${db}`, err => {
                 if(err){reject(err); return}
@@ -25,15 +26,6 @@ export default class UserModel {
             username: username,
             email: email
         });
+        mongoose.connection.close();
     }
 }
-
-//connection
-const user = new UserModel();
-
-user.connect('162.243.195.173', '27017', 'asiansocks').then(response => {
-    console.log('Connected');
-    user.create('bubu', 'bubu@bobo.com');
-
-
-}).catch(e => console.log(e));

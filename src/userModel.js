@@ -4,7 +4,7 @@ export default class UserModel {
     constructor(){
         this.user = mongoose.model('User', {
             username : String,
-            email: String
+            email: {type : String , unique : true}
         });
     }
 

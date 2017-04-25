@@ -82,12 +82,17 @@ if (fs.existsSync(config)) {
 
 let configStructure = fs.readFileSync(configSample, "utf8");
 
-let configDone = configStructure.replace('CONSUMERKEY', args.consumerkey);
-configDone = configDone.replace('CONSUMERSECRET', args.consumersecret);
-configDone = configDone.replace('TOKEN', args.token);
-configDone = configDone.replace('TOKENSECRET', args.tokensecret);
-configDone = configDone.replace('IP', args.ip);
-configDone = configDone.replace('PORT', args.port);
-configDone = configDone.replace('DB', args.db);
+
+//suggestion de modification :
+
+let configDone = configStructure
+    .replace('CONSUMERKEY', args.consumerkey)
+    .replace('CONSUMERSECRET', args.consumersecret)
+    .replace('TOKEN', args.token)
+    .replace('TOKENSECRET', args.tokensecret)
+    .replace('IP', args.ip)
+    .replace('PORT', args.port)
+    .replace('DB', args.db)
+    ;
 
 fs.appendFileSync(config, configDone);

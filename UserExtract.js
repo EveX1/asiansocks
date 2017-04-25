@@ -1,0 +1,5 @@
+
+
+class UserExtract extends UserModel {
+    
+}

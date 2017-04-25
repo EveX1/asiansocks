@@ -3,7 +3,6 @@
  */
 //recuperer un flux twitter
 const Twitter = require('node-tweet-stream')
-
 //lire et ecrure dansun fichier
 import fs from 'fs';
 import ArgParseObj from 'argparse';
@@ -42,57 +41,41 @@ parser.addArgument(
 const args = parser.parseArgs();
 
 // récupérer le fichier config
-const config = fs.readFileSync(path.join(__dirname, `/../${args.config}/config.yml`), "utf8");
-console.log(path.dirname(args.config));
+const config = yaml.safeLoad(fs.readFileSync(path.join(__dirname, `/../${args.config}/config.yml`), "utf8"));
+
 
 // enregistrer le tableau de keywords
 const keywords = args.keywords.split(',');
 
 
 /*
-* RECUPERATION DE CONFIG.YML
-*/
-let config2;
-try {
-    config2 = yaml.safeLoad(fs.readFileSync('./config/config.yml', 'utf8'));
-} catch (e) {
-    console.log(e);
-}
-
-console.log(config2.default.api.twitter.consumerkey);
-console.log(config2.default.api.twitter.consumersecret);
-console.log(config2.default.api.twitter.accestoken);
-console.log(config2.default.api.twitter.accesstokensecret);
-console.log(config2.default.db.ip);
-console.log(config2.default.db.port);
-console.log(config2.default.db.db);
-
-
-/*
  * RECUPERATION DES TWEETS
  */
 const t = new Twitter({
-    consumer_key: '7Ixba9BJWrGOxDjMYQCGKxVcR',
-    consumer_secret: 'fKYsaGMz36b4odzpCPWKRlTTNRXoBcqpASSkQDSjztmF1oB3uI',
-    token: '1269504528-DA42EtyEH1lkjmWr2MRXHLKfIqSOvW9ynmhvB8A',
-    token_secret: 'rLGRcS09b5Vg2SL0vujJHurlOleIZm2ul6tRi87N9sqrp'
+    consumer_key: config.default.api.twitter.consumerkey,
+    consumer_secret: config.default.api.twitter.consumersecret,
+    token: config.default.api.twitter.token,
+    token_secret: config.default.api.twitter.tokensecret
 })
 
 //regex test mail
 const regEmail = new RegExp(/(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})/gi);
 
+//pour le moment on enregistre les mails dans le tableau mails[]
 const mails = [];
 t.on('tweet', function (tweet) {
     const text = tweet.text;
     const mailText = text.match(regEmail);
     if (mailText !== null){
         mails.push(mailText);
+        console.log(mails);
     }
     if(tweet.user.description !== null) {
         const description = tweet.user.description;
         const mailDescription = description.match(regEmail);
         if (mailDescription !== null) {
             mails.push(mailDescription);
+            console.log(mails);
         }
     }
 })
@@ -102,5 +85,7 @@ t.on('error', function (err) {
 })
 
 //changer ici le ou les termes recherchés
-t.track('lepen')
+keywords.forEach(keyword => {
+    t.track(keyword);
+});
 

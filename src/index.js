@@ -6,7 +6,7 @@ import ArgParseObj from 'argparse';
 import path from 'path';
 
 /*
- * PARSER de mots-clés et Paramaètres d'API Twitter
+ * PARSER de mots-clés et Paramètres d'API Twitter
  */
 
 const ArgParse = ArgParseObj.ArgumentParser;
@@ -30,9 +30,12 @@ parser.addArgument(
     }
 );
 
+// enregistrer l'ensemble des arguments et leur valeur dans un objet args
 const args = parser.parseArgs();
 
-fs.readFileSync(path.join(__dirname, `/../${args.config}/config.yml`), "utf8");
-
-console.log(args.keywords.split(','));
+// récupérer le fichier config
+const config = fs.readFileSync(path.join(__dirname, `/../${args.config}/config.yml`), "utf8");
 console.log(path.dirname(args.config));
+
+// enregistrer le tableau de keywords
+const keywords = args.keywords.split(',');

@@ -1,13 +1,11 @@
 import UserModel from './UserModel';
 import Twitter from 'node-tweet-stream';
 import mongoose from 'mongoose';
+
 mongoose.Promise = global.Promise;
 
 export default class UserExtract{
     constructor(ck, cs, t, ts, ip, port, db, delay){
-        //the hack degueulasse !!
-        // let that = this;
-
         //connection
         this.connect(ip, port, db).then(response => {
             console.log('#####Connected#####');

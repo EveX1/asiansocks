@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node build/index.js",
-    "config": "node build/config.js",
+    "config": "node build/setConfig.js",
     "build": "babel src/ --out-dir build/",
     "build:watch": "babel --watch src/ --out-dir build/"
   },
@@ -31,6 +31,7 @@
     "mongoose": "^4.9.6",
     "node-tweet-stream": "^2.0.1",
     "path": "^0.12.7",
-    "pug": "^2.0.0-beta.12"
+    "pug": "^2.0.0-beta.12",
+    "underscore": "^1.8.3"
   }
 }

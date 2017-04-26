@@ -26,3 +26,4 @@ const userextract = new userExtract(
 
 userextract.extract(keywords);
 
+console.log('Coucou');

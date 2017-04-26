@@ -1,9 +1,16 @@
 /*
  *PACKAGES
  */
-//recuperer un flux twitter
-import Twitter from 'node-tweet-stream';
+import userExtract from './UserExtract';
 import Config from './Config';
+
+/*parser.addArgument(
+    ['-d', '--delay'], {
+        help: 'temps d\'execution du script',
+        defaultValue: 60000
+    }
+);
+*/
 
 // récupérer le fichier config
 const configClass = new Config();
@@ -16,40 +23,16 @@ const keywords = configClass.args.keywords.split(',');
 /*
  * RECUPERATION DES TWEETS
  */
-const t = new Twitter({
-    consumer_key: config.default.api.twitter.consumerkey,
-    consumer_secret: config.default.api.twitter.consumersecret,
-    token: config.default.api.twitter.token,
-    token_secret: config.default.api.twitter.tokensecret
-})
+const userextract = new userExtract(
+    config.default.api.twitter.consumerkey,
+    config.default.api.twitter.consumersecret,
+    config.default.api.twitter.token,
+    config.default.api.twitter.tokensecret,
+    config.default.db.ip,
+    config.default.db.port,
+    config.default.db.db,
+    args.delay
+);
 
-//regex test mail
-const regEmail = new RegExp(/(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})/gi);
+userextract.extract(keywords);
 
-//pour le moment on enregistre les mails dans le tableau mails[]
-const mails = [];
-t.on('tweet', function(tweet) {
-    const text = tweet.text;
-    const mailText = text.match(regEmail);
-    if (mailText !== null) {
-        mails.push(mailText);
-        console.log(mails);
-    }
-    if (tweet.user.description !== null) {
-        const description = tweet.user.description;
-        const mailDescription = description.match(regEmail);
-        if (mailDescription !== null) {
-            mails.push(mailDescription);
-            console.log(mails);
-        }
-    }
-})
-
-t.on('error', function(err) {
-    console.log('Oh no')
-})
-
-//changer ici le ou les termes recherchés
-keywords.forEach(keyword => {
-    t.track(keyword);
-});

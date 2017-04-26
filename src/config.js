@@ -7,6 +7,9 @@ import fs from 'fs';
 import ArgParseObj from 'argparse';
 // exploiter des fichiers YAML
 const yaml = require('js-yaml');
+// bibliothèque de fonctions utiles en JS
+import _ from 'underscore';
+// package de gestion des chemins
 import path from 'path';
 // ajouter des arguments à des commandes
 const ArgParse = ArgParseObj.ArgumentParser;
@@ -26,63 +29,66 @@ export default class Config {
         });
 
         // lancer la création des arguments
-        this.initArgs();
+        this._initArgs();
 
         // enregistrer l'ensemble des arguments et leur valeur dans un objet args
         this._args = this._parser.parseArgs();
+        // console.log(this._args);
 
         // récupérer le fichier sample et le fichier config à modifier
-        this._configSample = `.${this._args.config}/config.sample.yml`;
-        this._config = `.${this._args.config}/config.yml`;
+        this._configSampleFile = `.${this._args.config}/config.sample.yml`;
+        this._configFile = `.${this._args.config}/config.yml`;
+        // enregistrer le contenu du config.sample.yml dans une variable (sous forme de string)
+        this._configStructure = fs.readFileSync(this._configSampleFile, "utf8");
+        if (!fs.existsSync(this._configFile) || _.isEmpty(yaml.safeLoad(fs.readFileSync(this._configFile, "utf8")))) {
+            fs.writeFileSync(this._configFile, this._configStructure);
+        }
+        // enregistrer le contenu du config.yml dans une variable (sous forme de string)
+        this._config = fs.readFileSync(this._configFile, "utf8");
 
         // lancer la RAZ du config.yml
-        this.initConfigFiles();
-
-        // enregistrer le contenu du sample dans une variable (sous forme de string)
-        this._configStructure = fs.readFileSync(this._configSample, "utf8");
+        // this.initConfigFiles();
 
         // lancer configuration complète
-        this.setConfigAll()
+        this.setConfigAll();
 
         // extrait le config.yml en objet JS
-        this._configYaml = yaml.safeLoad(fs.readFileSync(this._config, "utf8"))
+        this._configYaml = yaml.safeLoad(fs.readFileSync(this._configFile, "utf8"))
 
-        // console.log(this._configYaml);
-
-        // this.getConfigApi('consumerkey');
-        // this.getConfigDb('ip');
-        // this.setConfigApi('token', 'boloss');
-        // this.getConfigApi('token');
+        // this.setConfigDb('db', 'asiansock2');
     }
 
     initConfigFiles() {
         // si le fichier de config existe, le supprimer
-        if (fs.existsSync(this._config)) {
-            fs.unlinkSync(this._config);
+        if (fs.existsSync(this._configFile)) {
+            fs.unlinkSync(this._configFile);
         }
     }
 
     setConfigApi(el, string) {
-        let change = this.getConfigApi(el)
-        let configDone = this._configStructure.replace(change, string)
-        fs.appendFileSync(this._config, configDone);
+        let change = this.getConfigApi(el);
+        let configDone = this._config.replace(change, string);
+        this.initConfigFiles();
+        fs.appendFileSync(this._configFile, configDone);
     }
 
     getConfigApi(el) {
-        console.log(this._configYaml.default.api.twitter[el]);
         return this._configYaml.default.api.twitter[el];
     }
 
-    setConfigDb(el) {
-        this._configStructure.replace(el.toUpperCase(), this._args.ip)
+    setConfigDb(el, string) {
+        let change = this.getConfigDb(el);
+        let configDone = this._config.replace(change, string);
+        this.initConfigFiles();
+        fs.appendFileSync(this._configFile, configDone);
     }
 
     getConfigDb(el) {
-        console.log(this._configYaml.default.db[el])
         return this._configYaml.default.db[el]
     }
 
     setConfigAll() {
+        this.initConfigFiles();
         // modifications de la variable du fichier config.sample.yml
         let configDone = this._configStructure
             .replace('CONSUMERKEY', this._args.consumerkey)
@@ -94,11 +100,11 @@ export default class Config {
             .replace('DB', this._args.db);
 
         // enregistrement des modifications dans le fichier config.yml
-        fs.appendFileSync(this._config, configDone);
+        fs.appendFileSync(this._configFile, configDone);
     }
 
     // Liste des arguments a créer
-    initArgs() {
+    _initArgs() {
         // this._parser.addArgument(
         //     ['-a', '--api'], {
         //         help: 'API a utiliser (twitter)'

@@ -31,21 +31,25 @@ export default class UserExtract{
             //verification si la connection est active (un peu overkill)
             if(mongoose.connection._readyState === 1){
                 const text = tweet.text;
-
-                const mailText = text.match(this.regEmail);
-
+                let mailText = text.match(this.regEmail);
 
                 if (mailText !== null){
-                    console.log(`Create user (text) : ${tweet.user.name}`);
+                    mailText = String(mailText);
+                    mailText = mailText.toLowerCase();
+                    console.log(`Create user : ${tweet.user.name}  (from tweet)`);
+                    console.log(`Email : ${mailText}`);
                     this.createUser(tweet.user.name, mailText);
                 }
 
                 if(tweet.user.description !== null) {
                     const description = tweet.user.description;
-                    const mailDescription = description.match(this.regEmail);
+                    let mailDescription = description.match(this.regEmail);
 
                     if(mailDescription !== null) {
-                        console.log(`Create user (desc) : ${tweet.user.name}`);
+                        mailDescription = String(mailDescription);
+                        mailDescription = mailDescription.toLowerCase();
+                        console.log(`Create user : ${tweet.user.name}  (from description)`);
+                        console.log(`Email : ${mailDescription}`);
                         this.createUser(tweet.user.name, mailDescription);
                     }
                 }
@@ -75,9 +79,6 @@ export default class UserExtract{
             mongoose.connection.close();
             console.log(`#####Connection closed : ${code} #####`);
         })
-
-
-
     }
 
     connect(ip, port, db){
@@ -97,7 +98,6 @@ export default class UserExtract{
     }
 
     createUser(username, email){
-        this.user.create(username, email);
-        console.log('User created');
+        this.user.UMCreate(username, email);
     }
 }

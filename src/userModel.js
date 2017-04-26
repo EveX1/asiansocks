@@ -9,10 +9,15 @@ export default class UserModel {
     }
 
 
-    create(username, email){
+    UMCreate(username, email){
         this.user.create({
             username: username,
             email: email
-        });
+        })
+        .then(() => {
+            console.log('User created');
+        })
+        .catch(err => console.log(`Error : ${err.message}`))
+        ;
     }
 }

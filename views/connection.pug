@@ -1,0 +1,28 @@
+doctype html
+html
+    head
+        title=AsianSocks
+        link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css")
+    body
+        p Un peu de sérieux dans ce monde de fou #{name}
+        h1 Team AsianSocks
+
+h1 Connect to Database
+
+    form(method="post")
+        label(for='name') BDD Connect:
+            br
+            br
+            label(for='name') Adress IP:
+            input(type='text', placeholder='' name='ip')
+            br
+            br
+            label(for='name') Port:
+            input(type='text', placeholder='' name='port')
+            br
+            br
+            label(for='name') DB:
+            input(type='text', placeholder='' name='db')
+            br
+            br
+            button(type='submit') Sign up

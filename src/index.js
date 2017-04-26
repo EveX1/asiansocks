@@ -30,7 +30,7 @@ app.get('/config', (req, res) => res.render('config', {
 }));
 
 app.post('/config', (req, res) => {
-    res.render('index', {
+    res.render('config', {
         consumerkey: req.body.consumerkey
     });
 });

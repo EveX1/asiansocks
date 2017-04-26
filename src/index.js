@@ -4,14 +4,6 @@
 import userExtract from './UserExtract';
 import Config from './Config';
 
-/*parser.addArgument(
-    ['-d', '--delay'], {
-        help: 'temps d\'execution du script',
-        defaultValue: 60000
-    }
-);
-*/
-
 // récupérer le fichier config
 const configClass = new Config();
 const config = configClass.getConfig();
@@ -20,9 +12,7 @@ const config = configClass.getConfig();
 const keywords = configClass.args.keywords.split(',');
 
 
-/*
- * RECUPERATION DES TWEETS
- */
+//recuperation des tweets
 const userextract = new userExtract(
     config.default.api.twitter.consumerkey,
     config.default.api.twitter.consumersecret,
@@ -31,7 +21,7 @@ const userextract = new userExtract(
     config.default.db.ip,
     config.default.db.port,
     config.default.db.db,
-    args.delay
+    configClass.args.delay
 );
 
 userextract.extract(keywords);

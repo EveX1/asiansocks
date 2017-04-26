@@ -171,5 +171,13 @@ export default class Config {
                 help: 'Liste de mots à utiliser pour recherche flux twitter'
             }
         );
+
+        this._parser.addArgument(
+            ['-d', '--delay'], {
+                help: 'temps d\'execution du script',
+                defaultValue: 60000
+            }
+         );
+
     }
 }

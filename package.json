@@ -26,6 +26,7 @@
   "homepage": "https://github.com/EveX1/asiansocks#readme",
   "dependencies": {
     "argparse": "^1.0.9",
+    "body-parser": "^1.17.1",
     "express": "^4.15.2",
     "js-yaml": "^3.8.3",
     "mongoose": "^4.9.6",

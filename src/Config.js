@@ -20,7 +20,6 @@ const ArgParse = ArgParseObj.ArgumentParser;
 
 export default class Config {
     constructor() {
-
         // créer un nouvel objet ArgParse
         this._parser = new ArgParse({
             version: '0.0.1',
@@ -29,15 +28,21 @@ export default class Config {
         });
 
         // lancer la création des arguments
-        this._initArgs();
+        this.initArgs();
 
         // enregistrer l'ensemble des arguments et leur valeur dans un objet args
-        this._args = this._parser.parseArgs();
-        // console.log(this._args);
+        this.args = this._parser.parseArgs();
+        // console.log(this.args);
 
         // récupérer le fichier sample et le fichier config à modifier
-        this._configSampleFile = `.${this._args.config}/config.sample.yml`;
-        this._configFile = `.${this._args.config}/config.yml`;
+        this._configSampleFile = `.${this.args.config}/config.sample.yml`;
+        this._configFile = `.${this.args.config}/config.yml`;
+
+        this.setConfig = this.setConfig.bind(this);
+        // this.setConfigDb('db', 'asiansock2');
+    }
+
+    setConfig(){
         // enregistrer le contenu du config.sample.yml dans une variable (sous forme de string)
         this._configStructure = fs.readFileSync(this._configSampleFile, "utf8");
         if (!fs.existsSync(this._configFile) || _.isEmpty(yaml.safeLoad(fs.readFileSync(this._configFile, "utf8")))) {
@@ -51,11 +56,12 @@ export default class Config {
 
         // lancer configuration complète
         this.setConfigAll();
+    }
 
+    getConfig(){
         // extrait le config.yml en objet JS
-        this._configYaml = yaml.safeLoad(fs.readFileSync(this._configFile, "utf8"))
-
-        // this.setConfigDb('db', 'asiansock2');
+        this.configYaml = yaml.safeLoad(fs.readFileSync(this._configFile, "utf8"))
+        return this.configYaml;
     }
 
     initConfigFiles() {
@@ -73,7 +79,7 @@ export default class Config {
     }
 
     getConfigApi(el) {
-        return this._configYaml.default.api.twitter[el];
+        return this.configYaml.default.api.twitter[el];
     }
 
     setConfigDb(el, string) {
@@ -84,27 +90,27 @@ export default class Config {
     }
 
     getConfigDb(el) {
-        return this._configYaml.default.db[el]
+        return this.configYaml.default.db[el]
     }
 
     setConfigAll() {
         this.initConfigFiles();
         // modifications de la variable du fichier config.sample.yml
         let configDone = this._configStructure
-            .replace('CONSUMERKEY', this._args.consumerkey)
-            .replace('CONSUMERSECRET', this._args.consumersecret)
-            .replace('TOKEN', this._args.token)
-            .replace('TOKENSECRET', this._args.tokensecret)
-            .replace('IP', this._args.ip)
-            .replace('PORT', this._args.port)
-            .replace('DB', this._args.db);
+            .replace('CONSUMERKEY', this.args.consumerkey)
+            .replace('CONSUMERSECRET', this.args.consumersecret)
+            .replace('TOKEN', this.args.token)
+            .replace('TOKENSECRET', this.args.tokensecret)
+            .replace('IP', this.args.ip)
+            .replace('PORT', this.args.port)
+            .replace('DB', this.args.db);
 
         // enregistrement des modifications dans le fichier config.yml
         fs.appendFileSync(this._configFile, configDone);
     }
 
     // Liste des arguments a créer
-    _initArgs() {
+    initArgs() {
         // this._parser.addArgument(
         //     ['-a', '--api'], {
         //         help: 'API a utiliser (twitter)'
@@ -157,6 +163,12 @@ export default class Config {
             ['-c', '--config'], {
                 help: 'Chemin du fichier de configuration pour API Twitter',
                 defaultValue: "/config"
+            }
+        );
+
+        this._parser.addArgument(
+            ['-k', '--keywords'], {
+                help: 'Liste de mots à utiliser pour recherche flux twitter'
             }
         );
     }

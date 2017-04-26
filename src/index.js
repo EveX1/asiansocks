@@ -3,7 +3,7 @@
  */
 //recuperer un flux twitter
 const Twitter = require('node-tweet-stream')
-//lire et ecrure dansun fichier
+    //lire et ecrure dansun fichier
 import fs from 'fs';
 import ArgParseObj from 'argparse';
 import path from 'path';
@@ -63,14 +63,14 @@ const regEmail = new RegExp(/(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*
 
 //pour le moment on enregistre les mails dans le tableau mails[]
 const mails = [];
-t.on('tweet', function (tweet) {
+t.on('tweet', function(tweet) {
     const text = tweet.text;
     const mailText = text.match(regEmail);
-    if (mailText !== null){
+    if (mailText !== null) {
         mails.push(mailText);
         console.log(mails);
     }
-    if(tweet.user.description !== null) {
+    if (tweet.user.description !== null) {
         const description = tweet.user.description;
         const mailDescription = description.match(regEmail);
         if (mailDescription !== null) {
@@ -80,7 +80,7 @@ t.on('tweet', function (tweet) {
     }
 })
 
-t.on('error', function (err) {
+t.on('error', function(err) {
     console.log('Oh no')
 })
 
@@ -88,4 +88,3 @@ t.on('error', function (err) {
 keywords.forEach(keyword => {
     t.track(keyword);
 });
-

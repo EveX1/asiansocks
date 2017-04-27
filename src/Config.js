@@ -5,8 +5,10 @@
 import fs from 'fs';
 // créer des arguments de commande perso
 import ArgParseObj from 'argparse';
-// exploiter des fichiers YAML
+// lire des fichiers YAML
 const yaml = require('js-yaml');
+// ecrire du JSON directement en YAML
+const writeData = require('write-data');
 // bibliothèque de fonctions utiles en JS
 import _ from 'underscore';
 // package de gestion des chemins
@@ -43,10 +45,8 @@ export default class Config {
         this._configStructure = fs.readFileSync(this._configSampleFile, "utf8");
         if (!fs.existsSync(this._configFile) || _.isEmpty(yaml.safeLoad(fs.readFileSync(this._configFile, "utf8")))) {
             fs.writeFileSync(this._configFile, this._configStructure);
-            this._config = fs.readFileSync(this._configFile, "utf8");
-        } else {
-            this._config = fs.readFileSync(this._configFile, "utf8");
         }
+        this._config = fs.readFileSync(this._configFile, "utf8");
 
     }
 
@@ -75,26 +75,23 @@ export default class Config {
     }
 
     setConfigKey(el, string) {
-        let change = this.getConfigKey(el);
-        console.warn(change);
-        console.warn(string);
-        console.warn(this._config);
-        let configDone = this._config.replace(change, string);
-        console.warn(configDone);
-        this.initConfigFiles();
-        fs.writeFileSync(this._configFile, configDone);
-        fs.closeSync(0);
-        console.warn(this._configFile)
+        let change = this.getConfig().default.api.twitter[el]
+        let data = this.getConfig()
+        console.log(data);
+        data.default.api.twitter[el] = string;
+        console.log(el);
+        console.log(data);
+        console.log(string);
+        writeData.sync(this._configFile, data)
         console.log(`${el}: ${change} a bien été modifié en ${el}: ${string}`);
-
     }
 
     getConfigKey(el) {
         if (el === "consumerkey" || el === "consumersecret" || el === "token" || el === "tokensecret") {
-            return this.configYaml.default.api.twitter[el];
+            return this.getConfig().default.api.twitter[el];
         }
         if (el === "ip" || el === "port" || el === "db") {
-            return this.configYaml.default.db[el];
+            return this.getConfig().default.db[el];
             // return "test";
         }
     }

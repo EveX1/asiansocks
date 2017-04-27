@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "name": "asiansocks",
     "version": "1.0.0",
     "description": "- compte dev Twitter   - fichier de configuration YAML   - récupérer flux twitter   - extraire les infos: Tweet, user   - extraire e-mail   - création objet User   - insertion BDD",
@@ -36,6 +37,7 @@
         "node-tweet-stream": "^2.0.1",
         "path": "^0.12.7",
         "pug": "^2.0.0-beta.12",
+        "write-data": "^1.0.0",
         "underscore": "^1.8.3"
     }
 }

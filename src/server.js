@@ -36,6 +36,12 @@ export default class Server {
             title: this._title
         }));
 
+        this._app.get('/logout', (req, res) => {
+            //destroy session
+            req.session.destroy();
+            res.redirect('/');
+        });
+
         this._app.set('view engine', 'pug');
         this._app.set('views', path.join(__dirname, '/../views'));
         this._app.use(bodyParser.json());

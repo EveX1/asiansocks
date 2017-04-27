@@ -13,16 +13,20 @@ export default class ConfigCtrl {
     }
 
     index(req, res) {
-        res.render('config', {
-            title: `Configuration`,
-            consumerkey: configClass.getConfigKey('consumerkey'),
-            consumersecret: configClass.getConfigKey('consumersecret'),
-            token: configClass.getConfigKey('token'),
-            tokensecret: configClass.getConfigKey('tokensecret'),
-            ip: configClass.getConfigKey('ip'),
-            port: configClass.getConfigKey('port'),
-            db: configClass.getConfigKey('db')
-        })
+        if (req.session.connected) {
+            res.render('config', {
+                title: `Configuration`,
+                consumerkey: configClass.getConfigKey('consumerkey'),
+                consumersecret: configClass.getConfigKey('consumersecret'),
+                token: configClass.getConfigKey('token'),
+                tokensecret: configClass.getConfigKey('tokensecret'),
+                ip: configClass.getConfigKey('ip'),
+                port: configClass.getConfigKey('port'),
+                db: configClass.getConfigKey('db')
+            })
+        } else {
+            res.render('unauth');
+        }
     }
 
     form(req, res) {

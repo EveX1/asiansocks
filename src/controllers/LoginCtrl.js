@@ -5,13 +5,22 @@ mongoose.Promise = global.Promise;
 import AppUser from '../AppUser';
 
 export default class LoginCtrl {
+    constructor(title){
+        this._title = title;
+    }
+
+    get title(){
+        return this._title;
+    }
+
     get(req, res){
+        // console.log(this.title);
         let msg = "";
         if (!_.isEmpty(req.param("msg"))) {
             msg = req.param("msg");
         }
         res.render('login', {
-        title: `AsianSocks login`,
+        title: `login`,
         msg: msg
         });
     }

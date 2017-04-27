@@ -10,6 +10,8 @@ import session from 'express-session';
 import ConfigCtrl from './controllers/ConfigCtrl';
 import RegistrationCtrl from './controllers/RegistrationCtrl';
 import LoginCtrl from './controllers/LoginCtrl';
+// import AppUser from './AppUser';
+
 
 /*
  * EXPRESS
@@ -20,6 +22,8 @@ export default class Server {
         this._app = express();
 
         this._title = "Asian Socks";
+
+        // this.user = new AppUser();
 
         // Use the session middleware
         this.sessParam = {
@@ -53,7 +57,7 @@ export default class Server {
     _initControllers() {
         const configCtrl = new ConfigCtrl();
         const registrationCtrl = new RegistrationCtrl();
-        const loginCtrl = new LoginCtrl();
+        const loginCtrl = new LoginCtrl(this._title);
 
 
         this._app.get('/config', configCtrl.index);

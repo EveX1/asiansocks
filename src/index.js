@@ -23,7 +23,7 @@ const connect = (ip, port, db) => {
     })
 }
 connect(config.default.db.ip, config.default.db.port, config.default.db.db).then(response => {
-    console.log('#####Connected#####');
+    console.log('Connected to Mongo DB');
     const server = new Server();
     server.run();
 }).catch(e => console.log(e));

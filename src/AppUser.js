@@ -1,16 +1,16 @@
 import mongoose from 'mongoose';
-import _ from 'underscore';
+import AppUserSchema from './AppUserSchema';
 
 export default class AppUser {
-    constructor(){
-        this.appUser = mongoose.model('AppUser', {
-            username : {type : String , unique : true},
-            pass: String
-        });
-    }
+    // constructor(){
+    //     this.appUser = mongoose.model('AppUser', {
+    //         username : {type : String , unique : true},
+    //         pass: String
+    //     });
+    // }
 
     registerInDb(username, pass){
-        this.appUser.create({
+        AppUserSchema.create({
             username: username,
             pass: pass
         })
@@ -23,7 +23,7 @@ export default class AppUser {
 
     connectz(pseudo, pass){
         const prom = new Promise((resolve, reject) => {
-            this.appUser.findOne({
+            AppUserSchema.findOne({
                 username: pseudo
             })
                 .then(user => resolve(user))

@@ -4,7 +4,11 @@
 import userExtract from './UserExtract';
 import Config from './Config';
 import Cmd from './Cmd';
+import Server from './Server';
 
-const myApp = new Cmd();
+const server = new Server();
+server.run();
 
-myApp.extract();
+// const myApp = new Cmd();
+
+// myApp.extract();

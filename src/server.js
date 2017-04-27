@@ -7,64 +7,42 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import path from 'path';
 
+import ConfigCtrl from './controllers/ConfigCtrl';
+
 /*
  * EXPRESS
  */
 
-const app = express();
-const configClass = new Config();
-// configClass.setConfig();
-configClass.getConfig();
+export default class Server {
+    constructor() {
+        this._app = express();
 
-const title = "Asian Socks";
+        this._title = "Asian Socks";
 
-const consumerkeyValues = configClass.getConfigApi('consumerkey');
-const consumersecretValues = configClass.getConfigApi('consumersecret');
-const tokenValues = configClass.getConfigApi('token');
-const tokensecretValues = configClass.getConfigApi('tokensecret');
-const ipValues = configClass.getConfigDb('ip');
-const portValues = configClass.getConfigDb('port');
-const dbValues = configClass.getConfigDb('db');
-// const config = configClass.getConfig();
+        this._app.use(express.static(path.join(__dirname, '/../public')));
 
-app.set('view engine', 'pug');
-app.set('views', path.join(__dirname, '/../views'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
+        this._app.get('/', (req, res) => res.render('index', {
+            title: this._title
+        }));
 
-app.get('/', (req, res) => res.render('index', {
-    title: `Bienvenue sur ${title}`
-}));
+        this._app.set('view engine', 'pug');
+        this._app.set('views', path.join(__dirname, '/../views'));
+        this._app.use(bodyParser.json());
+        this._app.use(bodyParser.urlencoded({
+            extended: true
+        }));
+    }
 
-app.get('/registration', (req, res) => res.render('registration', {
-    title: `Enregistrement sur ${title}`
-}));
+    _initControllers() {
+        const configCtrl = new ConfigCtrl();
 
-app.get('/config', (req, res) => res.render('config', {
-    title: `Configuration de ${title}`,
-    consumerkey: consumerkeyValues,
-    consumersecret: consumersecretValues,
-    token: tokenValues,
-    tokensecret: tokensecretValues,
-    ip: ipValues,
-    port: portValues,
-    db: dbValues
-}))
+        this._app.get('/config', configCtrl.index);
+        this._app.post('/config', configCtrl.form);
+    }
 
-app.post('/config', (req, res) => {
-    // configClass.setConfigApi(req.body.customerkey, req.body.)
-    // configClass.setConfigApi(req.body.customersecret, req.body.)
-    // configClass.setConfigApi(req.body.token, req.body.)
-    Object.keys(req.body).forEach(key => {
-        if (key === "consumerkey" || "consumersecret" || "token" || "tokensecret") {
-            configClass.setConfigApi(key, req.body[key]);
-        } else if (key === "ip" || "port" || "db") {
-            configClass.setConfigDb(key, req.body[key]);
-        }
-    })
-    res.render('config', {});
-});
+    run() {
+        this._initControllers();
 
-app.listen(3000, () => console.log("Connected on: 3000"));
+        this._app.listen(3000, () => console.log("Connected on: 3000"));
+    }
+}

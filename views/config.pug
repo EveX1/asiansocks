@@ -1,7 +1,7 @@
 doctype html
 html
     head
-        title=AsianSocks
+        title=title
         link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css")
     body
         h1 #{title}
@@ -9,7 +9,6 @@ html
         form(method="post")
             br
             br
-            p #{consumerkey}
             label(for='consumerkey') Key Consummer: 
             input(type='text', value=consumerkey, id='consumerkey', name='consumerkey')
             br
@@ -26,7 +25,7 @@ html
             input(type='text', value=tokensecret, id='tokensecret', name='tokensecret')
             br
             br
-            button(type='submit') Envoyer
+            button(type='submit') Valider
             br
             br
             br
@@ -46,6 +45,6 @@ html
             input(type='text', value=db, id='db', name='db')
             br
             br
-            button(type='submit') Sign up
+            button(type='submit') Valider
 script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js")
 script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js")

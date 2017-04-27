@@ -33,32 +33,35 @@ export default class Config {
         // enregistrer l'ensemble des arguments et leur valeur dans un objet args
         this.args = this._parser.parseArgs();
         // console.log(this.args);
+        this._configPath = (path.join(__dirname, '/../config'));
 
         // récupérer le fichier sample et le fichier config à modifier
-        this._configSampleFile = `.${this.args.config}/config.sample.yml`;
-        this._configFile = `.${this.args.config}/config.yml`;
+        this._configSampleFile = `${this._configPath}/config.sample.yml`;
+        this._configFile = `${this._configPath}/config.yml`;
 
-        this.setConfig = this.setConfig.bind(this);
-        // this.setConfigDb('db', 'asiansock2');
+        // enregistrer le contenu du config.yml dans une variable (sous forme de string)
+        this._configStructure = fs.readFileSync(this._configSampleFile, "utf8");
+        if (!fs.existsSync(this._configFile) || _.isEmpty(yaml.safeLoad(fs.readFileSync(this._configFile, "utf8")))) {
+            fs.writeFileSync(this._configFile, this._configStructure);
+            this._config = fs.readFileSync(this._configFile, "utf8");
+        } else {
+            this._config = fs.readFileSync(this._configFile, "utf8");
+        }
+
     }
 
-    setConfig(){
+    setConfig() {
         // enregistrer le contenu du config.sample.yml dans une variable (sous forme de string)
         this._configStructure = fs.readFileSync(this._configSampleFile, "utf8");
         if (!fs.existsSync(this._configFile) || _.isEmpty(yaml.safeLoad(fs.readFileSync(this._configFile, "utf8")))) {
             fs.writeFileSync(this._configFile, this._configStructure);
         }
-        // enregistrer le contenu du config.yml dans une variable (sous forme de string)
-        this._config = fs.readFileSync(this._configFile, "utf8");
 
-        // lancer la RAZ du config.yml
-        // this.initConfigFiles();
-
-        // lancer configuration complète
-        this.setConfigAll();
+        // // lancer configuration complète
+        // this.setConfigAll();
     }
 
-    getConfig(){
+    getConfig() {
         // extrait le config.yml en objet JS
         this.configYaml = yaml.safeLoad(fs.readFileSync(this._configFile, "utf8"))
         return this.configYaml;
@@ -71,26 +74,29 @@ export default class Config {
         }
     }
 
-    setConfigApi(el, string) {
-        let change = this.getConfigApi(el);
+    setConfigKey(el, string) {
+        let change = this.getConfigKey(el);
+        console.warn(change);
+        console.warn(string);
+        console.warn(this._config);
         let configDone = this._config.replace(change, string);
+        console.warn(configDone);
         this.initConfigFiles();
-        fs.appendFileSync(this._configFile, configDone);
+        fs.writeFileSync(this._configFile, configDone);
+        fs.closeSync(0);
+        console.warn(this._configFile)
+        console.log(`${el}: ${change} a bien été modifié en ${el}: ${string}`);
+
     }
 
-    getConfigApi(el) {
-        return this.configYaml.default.api.twitter[el];
-    }
-
-    setConfigDb(el, string) {
-        let change = this.getConfigDb(el);
-        let configDone = this._config.replace(change, string);
-        this.initConfigFiles();
-        fs.appendFileSync(this._configFile, configDone);
-    }
-
-    getConfigDb(el) {
-        return this.configYaml.default.db[el]
+    getConfigKey(el) {
+        if (el === "consumerkey" || el === "consumersecret" || el === "token" || el === "tokensecret") {
+            return this.configYaml.default.api.twitter[el];
+        }
+        if (el === "ip" || el === "port" || el === "db") {
+            return this.configYaml.default.db[el];
+            // return "test";
+        }
     }
 
     setConfigAll() {
@@ -177,7 +183,7 @@ export default class Config {
                 help: 'temps d\'execution du script',
                 defaultValue: 60000
             }
-         );
+        );
 
     }
 }

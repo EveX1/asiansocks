@@ -12,7 +12,18 @@ import path from 'path';
  */
 
 const app = express();
-const title = "Asian Socks"
+const configClass = new Config;
+
+const title = "Asian Socks";
+
+const consumerkey = configClass.getConfigApi(consumerkey);
+const consumersecret = configClass.getConfigApi(consumersecret);
+const token = configClass.getConfigApi(token);
+const tokenscret = configClass.getConfigApi(tokenscret);
+const ip = configClass.getConfigDb(ip);
+const port = configClass.getConfigDb(port);
+const db = configClass.getConfigDb(db);
+// const config = configClass.getConfig();
 
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, '/../views'));

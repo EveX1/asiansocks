@@ -1,5 +1,7 @@
 node_modules
 config/config.yml
+config/_config.yml
 build
 nmp-debug.log
+bash.exe.stackdump
 .idea/

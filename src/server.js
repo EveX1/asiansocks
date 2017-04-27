@@ -33,142 +33,49 @@ connect(config.default.db.ip, config.default.db.port, config.default.db.db).then
     const user = new AppUser();
 
     /*
-     * EXPRESS
+     * SERVER
      */
+    export default class Server {
+        constructor() {
+            this._app = express();
 
-    const app = express();
-    const title = "Asian Socks"
+            this._title = "Asian Socks";
 
-//utilisation du répertoire 'public' pour les css et cie
-    app.use(express.static(path.join(__dirname, '/../public')));
-
-// Use the session middleware
-    const sessParam = {
-        secret:'secret',
-        cookie: {
-            maxAge: 60000
-        }
-    };
-    app.use(session(sessParam));
-
-
-
-    app.set('view engine', 'pug');
-    app.set('views', path.join(__dirname, '/../views'));
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({
-        extended: true
-    }));
-
-    app.get('/', (req, res) => res.render('index', {
-        title: `Bienvenue sur ${title}`
-    }));
-
-    app.get('/registration', (req, res) => {
-        let msg = "";
-        if(!_.isEmpty(req.param("msg"))){
-            msg = req.param("msg");
-        }
-        res.render('registration', {
-            title: `Enregistrement sur ${title}`,
-            msg: msg
-        })
-    });
-
-    app.post('/registration', (req, res) => {
-        if(!_.isEmpty(req.body.pseudo) && !_.isEmpty(req.body.pass) && !_.isEmpty(req.body.passConf)){
-            if(req.body.pass === req.body.passConf){
-                //enregistrement dans la bdd
-                if(mongoose.connection._readyState === 1){
-                    //ENCRYPTION
-                    const saltRounds = 10;
-                    encrypt.hash(req.body.pass, saltRounds, (err, hash) => {
-                        user.registerInDb(req.body.pseudo, hash);
-                        res.redirect('/registration?msg=ok');
-                    })
-                } else {
-                    res.redirect('/registration?msg=connect');
+            // Use the session middleware
+            this.sessParam = {
+                secret:'secret',
+                cookie: {
+                    maxAge: 60000
                 }
-            } else {
-                res.redirect('/registration?msg=pass');
-            }
-        } else {
-            res.redirect('/registration?msg=empty');
+            };
+            this._app.use(session(sessParam));
+            
+
+            this._app.use(express.static(path.join(__dirname, '/../public')));
+
+            this._app.get('/', (req, res) => res.render('index', {
+                title: this._title
+            }));
+
+            this._app.set('view engine', 'pug');
+            this._app.set('views', path.join(__dirname, '/../views'));
+            this._app.use(bodyParser.json());
+            this._app.use(bodyParser.urlencoded({
+                extended: true
+            }));
         }
 
-    })
+        _initControllers() {
+            const configCtrl = new ConfigCtrl();
 
-    app.get('/login', (req, res) => {
-        let msg = "";
-        if(!_.isEmpty(req.param("msg"))){
-            msg = req.param("msg");
+            this._app.get('/config', configCtrl.index);
+            this._app.post('/config', configCtrl.form);
         }
-        res.render('login', {
-            title: `AsianSocks login`,
-            msg: msg
-        });
-    });
 
-    app.post('/login', (req, res) => {
-        if(mongoose.connection._readyState === 1){
-            user.connectz(req.body.pseudo, req.body.pass)
-                .then(user => {
-                    console.log(`find user : ${user.username}`)
-                    //password verification
-                    encrypt.compare(req.body.pass, user.pass, (err, resp) => {
-                        if(resp){
-                            console.log(`user connected`)
-                            //save session
-                            req.session.connected = true;
-                            req.session.pseudo = req.body.pseudo;
-                            res.redirect('/config');
-                        } else {
-                            console.log(`wrong pass`)
-                            res.redirect('/login?msg=e');
-                        }
-                    });
-                })
-                .catch(e => {
-                    console.log(`no user found ${e}`)
-                    res.redirect('/login?msg=e');
-                })
-            ;
+        run() {
+            this._initControllers();
+
+            this._app.listen(3000, () => console.log("Connected on: 3000"));
         }
-    });
-
-
-
-    app.get('/config', (req, res) => {
-        if(req.session.connected){
-            res.render('config', {
-                title: `Configuration de ${title}`,
-                pseudo: req.session.pseudo
-            })
-        } else {
-            res.render('unauth', {
-                title: `Acces interdit`
-            })
-        }
-    });
-
-    app.post('/config', (req, res) => {
-        res.render('config', {
-            consumerkey: req.body.consumerkey,
-            consumersecret: req.body.consumersecret,
-            token: req.body.token,
-            tokenscret: req.body.tokenscret,
-            ip: req.body.ip,
-            port: req.body.port,
-            db: req.body.db,
-            config: req.body.config
-        });
-    });
-
-    app.get('/logout', (req, res) => {
-        req.session.destroy();
-        res.redirect('/config');
-    });
-
-    app.listen(3000, () => console.log("Connected on: 3000"));
-
+    }
 }).catch(e => console.log(e));

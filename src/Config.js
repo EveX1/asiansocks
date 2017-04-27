@@ -79,14 +79,16 @@ export default class Config {
             let change = this.getConfig().default.api.twitter[el]
             let data = this.getConfig()
             data.default.api.twitter[el] = string;
+            writeData.sync(this._configFile, data)
+            console.log(`${el}: ${change} a bien été modifié en ${el}: ${string}`);
         }
         if (el === "ip" || el === "port" || el === "db") {
             let change = this.getConfig().default.db[el];
             let data = this.getConfig()
             data.default.db[el] = string;
+            writeData.sync(this._configFile, data)
+            console.log(`${el}: ${change} a bien été modifié en ${el}: ${string}`);
         }
-        writeData.sync(this._configFile, data)
-        console.log(`${el}: ${change} a bien été modifié en ${el}: ${string}`);
     }
 
     getConfigKey(el) {

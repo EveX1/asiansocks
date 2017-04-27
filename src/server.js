@@ -47,7 +47,7 @@ app.get('/config', (req, res) => res.render('config', {
     consumerkey: consumerkeyValues,
     consumersecret: consumersecretValues,
     token: tokenValues,
-    tokenscret: tokensecretValues,
+    tokensecret: tokensecretValues,
     ip: ipValues,
     port: portValues,
     db: dbValues

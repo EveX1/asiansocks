@@ -15,15 +15,15 @@ html
                 br
                 br
                 label(for='name') Secret Consummer:
-                input(type='text', placeholder='', name='consumersecret')
+                input(type='text', value=consumersecret, name='consumersecret')
                 br
                 br
                 label(for='name') Token:
-                input(type='text', placeholder='', name='token')
+                input(type='text', value=token, name='token')
                 br
                 br
                 label(for='name') Token secret:
-                input(type='text', placeholder='', name='tokensecret')
+                input(type='text', value=tokensecret, name='tokensecret')
                 br
                 br
                 button(type=submit) Envoyer
@@ -36,15 +36,15 @@ html
                 br
                 br
                 label(for='name') Adress IP:
-                input(type='text', placeholder='' name='ip')
+                input(type='text', value=ip name='ip')
                 br
                 br
                 label(for='name') Port:
-                input(type='text', placeholder='' name='port')
+                input(type='text', value=port name='port')
                 br
                 br
                 label(for='name') DB:
-                input(type='text', placeholder='' name='db')
+                input(type='text', value=db name='db')
                 br
                 br
                 button(type='submit') Sign up
@@ -56,16 +56,16 @@ script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
     //
     //form(method="post")
     //     label(for='name') Name:
-    //         input#name.form-control(type='text', placeholder='Ip adress' name='ip')
-    //         input#name.form-control(type='text', placeholder='Port' name='port')
-    //         input#name.form-control(type='text', placeholder='Database' name='db')
+    //         input#name.form-control(type='text', value='Ip adress' name='ip')
+    //         input#name.form-control(type='text', value='Port' name='port')
+    //         input#name.form-control(type='text', value='Database' name='db')
     //         button.btn.btn-primary(type='submit') Sign up
 
     //    label(for='email') Email:
-    //    input#email.form-control(type='email', placeholder='name@email.com' name='email')
+    //    input#email.form-control(type='email', value='name@email.com' name='email')
     //div.form-group
     //    label(for='favoriteBook') Favorite Book:
-    //    input#favoriteBook.form-control(type='text', placeholder='title of book' name='favoriteBook')
+    //    input#favoriteBook.form-control(type='text', value='title of book' name='favoriteBook')
     //div.form-group
     //    label(for='pw') Password:
     //    input#pw.form-control(type='password' name='password')

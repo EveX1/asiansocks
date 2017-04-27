@@ -25,13 +25,24 @@ app.get('/', (req, res) => res.render('index', {
     title: `Bienvenue sur ${title}`
 }));
 
+app.get('/registration', (req, res) => res.render('registration', {
+    title: `Enregistrement sur ${title}`
+}));
+
 app.get('/config', (req, res) => res.render('config', {
     title: `Configuration de ${title}`
 }));
 
 app.post('/config', (req, res) => {
-    res.render('index', {
-        consumerkey: req.body.consumerkey
+    res.render('config', {
+        consumerkey: req.body.consumerkey,
+        consumersecret: req.body.consumersecret,
+        token: req.body.token,
+        tokenscret: req.body.tokenscret,
+        ip: req.body.ip,
+        port: req.body.port,
+        db: req.body.db,
+        config: req.body.config
     });
 });
 

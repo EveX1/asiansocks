@@ -1,0 +1,16 @@
+doctype html
+html
+    include head.pug
+    body
+        h1 Login
+        if msg == "e"
+            p(class="err") Username or Pass incorrect
+        div(id="log-form" class="form")
+            form(method="post")
+                label(for='pseudo') Pseudo:
+                input(type='text', placeholder='Pseudo' id='pseudo' name='pseudo')
+                br
+                label(for='pass') Password:
+                input(type='password', placeholder='password' id='pass' name='pass')
+                br
+                button(type='submit') Sign up

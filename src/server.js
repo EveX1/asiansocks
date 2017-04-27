@@ -21,7 +21,7 @@ const title = "Asian Socks";
 const consumerkeyValues = configClass.getConfigApi('consumerkey');
 const consumersecretValues = configClass.getConfigApi('consumersecret');
 const tokenValues = configClass.getConfigApi('token');
-const tokenscretValues = configClass.getConfigApi('tokensecret');
+const tokensecretValues = configClass.getConfigApi('tokensecret');
 const ipValues = configClass.getConfigDb('ip');
 const portValues = configClass.getConfigDb('port');
 const dbValues = configClass.getConfigDb('db');
@@ -47,7 +47,7 @@ app.get('/config', (req, res) => res.render('config', {
     consumerkey: consumerkeyValues,
     consumersecret: consumersecretValues,
     token: tokenValues,
-    tokenscret: tokenscretValues,
+    tokenscret: tokensecretValues,
     ip: ipValues,
     port: portValues,
     db: dbValues

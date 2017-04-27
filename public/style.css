@@ -1,0 +1,21 @@
+h1 {
+    text-align: center;
+}
+
+.content{
+    text-align: center;
+}
+
+.form{
+    display: flex;
+    justify-content: center;
+}
+
+.err{
+    color: #f00;
+    text-align: center;
+}
+.ok{
+    color: #00B403;
+    text-align: center;
+}

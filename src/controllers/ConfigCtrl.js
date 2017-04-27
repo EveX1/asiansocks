@@ -5,7 +5,7 @@ import Config from './../Config';
 
 const configClass = new Config();
 configClass.getConfig();
-configClass.setConfigKey('token', 'jaimepaslescheminsrelatifs3');
+// configClass.setConfigKey('token', 'jaimepaslescheminsrelatifs3');
 
 export default class ConfigCtrl {
 

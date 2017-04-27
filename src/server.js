@@ -6,8 +6,10 @@ import Config from './Config';
 import express from 'express';
 import bodyParser from 'body-parser';
 import path from 'path';
-
+import session from 'express-session';
 import ConfigCtrl from './controllers/ConfigCtrl';
+import RegistrationCtrl from './controllers/RegistrationCtrl';
+import LoginCtrl from './controllers/LoginCtrl';
 
 /*
  * EXPRESS
@@ -18,6 +20,15 @@ export default class Server {
         this._app = express();
 
         this._title = "Asian Socks";
+
+        // Use the session middleware
+        this.sessParam = {
+            secret:'secret',
+            cookie: {
+                maxAge: 60000
+            }
+        };
+        this._app.use(session(this.sessParam));
 
         this._app.use(express.static(path.join(__dirname, '/../public')));
 
@@ -35,9 +46,16 @@ export default class Server {
 
     _initControllers() {
         const configCtrl = new ConfigCtrl();
+        const registrationCtrl = new RegistrationCtrl();
+        const loginCtrl = new LoginCtrl();
+
 
         this._app.get('/config', configCtrl.index);
         this._app.post('/config', configCtrl.form);
+        this._app.get('/registration', registrationCtrl.get);
+        this._app.post('/registration', registrationCtrl.post);
+        this._app.get('/login', loginCtrl.get);
+        this._app.post('/login', loginCtrl.post);
     }
 
     run() {

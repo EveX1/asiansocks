@@ -1,0 +1,30 @@
+doctype html
+html
+    include head.pug
+    body
+        h1 Registration form
+        if msg == "empty"
+            p(class="err") Please fill all fields
+        if msg == "pass"
+            p(class="err") Passwords don't match
+        if msg == "connect"
+            p(class="err") Db connection issue !
+        if msg == "ok"
+            p(class="ok")
+                |Registration ok !
+                br
+                |go to the
+                a(href="login") login page
+
+        div(id="reg-form" class="form")
+            form(method="post")
+                label(for='pseudo') Pseudo:
+                input(type='text', placeholder='Pseudo' id='pseudo' name='pseudo')
+                br
+                label(for='pass') Password:
+                input(type='password', placeholder='password' id='pass' name='pass')
+                br
+                label(for='passConf') Confirm password:
+                input(type='password', placeholder='password' id='passConf' name='passConf')
+                br
+                button(type='submit') Sign up

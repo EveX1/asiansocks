@@ -12,17 +12,19 @@ import path from 'path';
  */
 
 const app = express();
-const configClass = new Config;
+const configClass = new Config();
+// configClass.setConfig();
+configClass.getConfig();
 
 const title = "Asian Socks";
 
-const consumerkey = configClass.getConfigApi(consumerkey);
-const consumersecret = configClass.getConfigApi(consumersecret);
-const token = configClass.getConfigApi(token);
-const tokenscret = configClass.getConfigApi(tokenscret);
-const ip = configClass.getConfigDb(ip);
-const port = configClass.getConfigDb(port);
-const db = configClass.getConfigDb(db);
+const consumerkeyValues = configClass.getConfigApi('consumerkey');
+const consumersecretValues = configClass.getConfigApi('consumersecret');
+const tokenValues = configClass.getConfigApi('token');
+const tokenscretValues = configClass.getConfigApi('tokensecret');
+const ipValues = configClass.getConfigDb('ip');
+const portValues = configClass.getConfigDb('port');
+const dbValues = configClass.getConfigDb('db');
 // const config = configClass.getConfig();
 
 app.set('view engine', 'pug');
@@ -41,20 +43,28 @@ app.get('/registration', (req, res) => res.render('registration', {
 }));
 
 app.get('/config', (req, res) => res.render('config', {
-    title: `Configuration de ${title}`
-}));
+    title: `Configuration de ${title}`,
+    consumerkey: consumerkeyValues,
+    consumersecret: consumersecretValues,
+    token: tokenValues,
+    tokenscret: tokenscretValues,
+    ip: ipValues,
+    port: portValues,
+    db: dbValues
+}))
 
 app.post('/config', (req, res) => {
-    res.render('config', {
-        consumerkey: req.body.consumerkey,
-        consumersecret: req.body.consumersecret,
-        token: req.body.token,
-        tokenscret: req.body.tokenscret,
-        ip: req.body.ip,
-        port: req.body.port,
-        db: req.body.db,
-        config: req.body.config
-    });
+    // configClass.setConfigApi(req.body.customerkey, req.body.)
+    // configClass.setConfigApi(req.body.customersecret, req.body.)
+    // configClass.setConfigApi(req.body.token, req.body.)
+    Object.keys(req.body).forEach(key => {
+        if (key === "consumerkey" || "consumersecret" || "token" || "tokensecret") {
+            configClass.setConfigApi(key, req.body[key]);
+        } else if (key === "ip" || "port" || "db") {
+            configClass.setConfigDb(key, req.body[key]);
+        }
+    })
+    res.render('config', {});
 });
 
 app.listen(3000, () => console.log("Connected on: 3000"));

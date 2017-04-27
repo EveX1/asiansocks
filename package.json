@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
     "name": "asiansocks",
     "version": "1.0.0",
     "description": "- compte dev Twitter   - fichier de configuration YAML   - récupérer flux twitter   - extraire les infos: Tweet, user   - extraire e-mail   - création objet User   - insertion BDD",

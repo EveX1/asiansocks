@@ -6,27 +6,23 @@ import AppUser from '../AppUser';
 
 export default class LoginCtrl {
     constructor(title){
-        this._title = title;
+        this.title = title;
     }
 
-    get title(){
-        return this._title;
-    }
-
-    get(req, res){
-        // console.log(this.title);
+    index(req, res){
+        console.log(this);
         let msg = "";
         if (!_.isEmpty(req.param("msg"))) {
             msg = req.param("msg");
         }
         res.render('login', {
-        title: `login`,
+        title: `${this.title} - login`,
         msg: msg
         });
     }
 
 
-    post(req, res){
+    form(req, res){
         if (mongoose.connection._readyState === 1) {
             const user = new AppUser();
             user.connectz(req.body.pseudo, req.body.pass)

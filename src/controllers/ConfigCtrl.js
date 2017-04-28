@@ -7,15 +7,14 @@ const configClass = new Config();
 configClass.getConfig();
 
 export default class ConfigCtrl {
-
-    constructor() {
-
+    constructor(title){
+        this.title = title;
     }
 
     index(req, res) {
         if (req.session.connected) {
             res.render('config', {
-                title: `Configuration`,
+                title: `${this.title} - configuration`,
                 consumerkey: configClass.getConfigKey('consumerkey'),
                 consumersecret: configClass.getConfigKey('consumersecret'),
                 token: configClass.getConfigKey('token'),

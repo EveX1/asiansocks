@@ -1,8 +1,6 @@
 /*
  *PACKAGES
  */
-import userExtract from './UserExtract';
-import Config from './Config';
 import express from 'express';
 import bodyParser from 'body-parser';
 import path from 'path';
@@ -10,7 +8,8 @@ import session from 'express-session';
 import ConfigCtrl from './controllers/ConfigCtrl';
 import RegistrationCtrl from './controllers/RegistrationCtrl';
 import LoginCtrl from './controllers/LoginCtrl';
-// import AppUser from './AppUser';
+import AppParam from './AppParam';
+
 
 
 /*
@@ -21,9 +20,9 @@ export default class Server {
     constructor() {
         this._app = express();
 
-        this._title = "Asian Socks";
-
-        // this.user = new AppUser();
+        //app params
+        const params = new AppParam();
+        this.title = params.title;
 
         // Use the session middleware
         this.sessParam = {
@@ -37,7 +36,7 @@ export default class Server {
         this._app.use(express.static(path.join(__dirname, '/../public')));
 
         this._app.get('/', (req, res) => res.render('index', {
-            title: this._title
+            title: this.title
         }));
 
         this._app.get('/logout', (req, res) => {
@@ -55,17 +54,16 @@ export default class Server {
     }
 
     _initControllers() {
-        const configCtrl = new ConfigCtrl();
-        const registrationCtrl = new RegistrationCtrl();
-        const loginCtrl = new LoginCtrl(this._title);
+        const configCtrl = new ConfigCtrl(this.title);
+        const registrationCtrl = new RegistrationCtrl(this.title);
+        const loginCtrl = new LoginCtrl(this.title);
 
-
-        this._app.get('/config', configCtrl.index);
+        this._app.get('/config', configCtrl.index.bind(loginCtrl));
         this._app.post('/config', configCtrl.form);
-        this._app.get('/registration', registrationCtrl.get);
-        this._app.post('/registration', registrationCtrl.post);
-        this._app.get('/login', loginCtrl.get);
-        this._app.post('/login', loginCtrl.post);
+        this._app.get('/registration', registrationCtrl.index.bind(loginCtrl));
+        this._app.post('/registration', registrationCtrl.form);
+        this._app.get('/login', loginCtrl.index.bind(loginCtrl));
+        this._app.post('/login', loginCtrl.form);
     }
 
     run() {

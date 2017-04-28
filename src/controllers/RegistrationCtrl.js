@@ -1,25 +1,27 @@
 import _ from 'underscore';
 import mongoose from 'mongoose';
 import encrypt from 'bcrypt';
-mongoose.Promise = global.Promise;
 import AppUser from '../AppUser';
-
+mongoose.Promise = global.Promise;
 
 export default class RegistrationCtrl {
-    get(req, res){
-        const title = "Enregistrement sur asian socks"
+    constructor(title){
+        this.title = title;
+    }
+
+    index(req, res){
         let msg = "";
         if (!_.isEmpty(req.param("msg"))) {
             msg = req.param("msg");
         }
         res.render('registration', {
-            title: title,
+            title: `${this.title} - registration`,
             msg: msg
         })
     }
 
 
-    post(req, res){
+    form(req, res){
         if (!_.isEmpty(req.body.pseudo) && !_.isEmpty(req.body.pass) && !_.isEmpty(req.body.passConf)) {
             if (req.body.pass === req.body.passConf) {
                 //enregistrement dans la bdd
